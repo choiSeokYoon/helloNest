@@ -1,33 +1,32 @@
 import { PostDto } from './blog.model';
 
-export class BlogService {
-  posts = [];
+//TODO :  서비스 파일은 리포지토리를 사용하는 단순한 로직으로 변경
 
-  getAllPost() {
-    return this.posts;
+import { BlogFileRepository, BlogRepository } from './blog.repository';
+export class BlogService {
+  blogRepository: BlogRepository;
+
+  constructor() {
+    this.blogRepository = new BlogFileRepository();
+  }
+
+  async getAllPost() {
+    return await this.blogRepository.getAllPost();
   }
 
   createPost(postDto: PostDto) {
-    const id = this.posts.length + 1;
-    this.posts.push({ id: id.toString(), ...postDto, createdDt: new Date() });
+    this.blogRepository.createPost(postDto);
   }
-  getPost(id) {
-    const post = this.posts.find((post) => {
-      return post.id === id;
-    });
-    console.log(post);
-    return post;
+
+  async getPost(id) {
+    return await this.blogRepository.getPost(id);
   }
 
   delete(id) {
-    const filteredPosts = this.posts.filter((post) => post.id !== id);
-    this.posts = [...filteredPosts];
+    this.blogRepository.deletePost(id);
   }
 
   updatePost(id, postDto: PostDto) {
-    let updateIndex = this.posts.findIndex((post) => post.id === id);
-    const updatePost = { id, ...postDto, updateDt: new Date() };
-    this.posts[updateIndex] = updatePost;
-    return updatePost;
+    this.blogRepository.updatePost(id, postDto);
   }
 }
