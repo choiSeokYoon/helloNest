@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 import { PostDto } from './blog.model';
+import { Injectable } from '@nestjs/common';
 
 //리포지토리 인터페이스 정의
 
@@ -11,6 +12,7 @@ export interface BlogRepository {
   updatePost(id: string, postDto: PostDto);
 }
 
+@Injectable()
 export class BlogFileRepository implements BlogRepository {
   FILE_NAME = './src/blog.data.json';
 
