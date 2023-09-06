@@ -1,12 +1,12 @@
 import { PostDto } from './blog.model';
 import { Injectable } from '@nestjs/common';
+import { BlogMongoRepository } from './blog.repository';
 
-//TODO :  서비스 파일은 리포지토리를 사용하는 단순한 로직으로 변경
-
-import { BlogFileRepository } from './blog.repository';
 @Injectable()
 export class BlogService {
-  constructor(private blogRepository: BlogFileRepository) {}
+  constructor(private blogRepository: BlogMongoRepository) {}
+
+  posts = [];
 
   async getAllPost() {
     return await this.blogRepository.getAllPost();
@@ -16,7 +16,7 @@ export class BlogService {
     this.blogRepository.createPost(postDto);
   }
 
-  async getPost(id) {
+  async getPost(id): Promise<PostDto> {
     return await this.blogRepository.getPost(id);
   }
 
